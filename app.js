@@ -9,6 +9,7 @@ const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
 const errorHandler = require('./middlewares/error-handler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } =
   process.env;
@@ -32,6 +33,8 @@ app.use(express.json());
 app.use(requestLogger);
 
 app.use(limiter);
+
+app.use(cors);
 
 app.post(
   '/signup',
