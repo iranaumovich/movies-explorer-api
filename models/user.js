@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+const isEmail = require('validator/lib/isEmail');
 
 // создаем схему пользователя
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
+    validate: [isEmail, 'Неправильный email'],
     required: true,
     unique: true,
   },

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const isUrl = require('validator/lib/isURL');
 
 // создаем схему фильма
 const movieSchema = new mongoose.Schema({
@@ -25,29 +26,17 @@ const movieSchema = new mongoose.Schema({
   image: {
     type: String,
     required: true,
-    validate: {
-      validator: (v) =>
-        /^[https?://(www.)?][\w\d-._~:/?#[\]@!$&'()*+,;=]{1,}#?$/.test(v),
-      message: 'неверная ссылка',
-    },
+    validate: [isUrl, 'Неверная ссылка'],
   },
   trailerLink: {
     type: String,
     required: true,
-    validate: {
-      validator: (v) =>
-        /^[https?://(www.)?][\w\d-._~:/?#[\]@!$&'()*+,;=]{1,}#?$/.test(v),
-      message: 'неверная ссылка',
-    },
+    validate: [isUrl, 'Неверная ссылка'],
   },
   thumbnail: {
     type: String,
     required: true,
-    validate: {
-      validator: (v) =>
-        /^[https?://(www.)?][\w\d-._~:/?#[\]@!$&'()*+,;=]{1,}#?$/.test(v),
-      message: 'неверная ссылка',
-    },
+    validate: [isUrl, 'Неверная ссылка'],
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

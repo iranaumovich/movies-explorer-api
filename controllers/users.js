@@ -86,6 +86,12 @@ module.exports.updateUser = (req, res, next) => {
       }
     })
     .catch((err) => {
+      if (err.code === 11000) {
+        throw new ConflictingRequestError(
+          'Пользователь с таким email уже зарегистрирован',
+        );
+      }
+
       if (err.name === 'ValidationError') {
         throw new InvalidUserDataError(
           'Переданы некорректные данные при обновлении профиля',

@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const { celebrate, Joi, errors } = require('celebrate');
-const rateLimit = require('express-rate-limit');
+const { limiter } = require('./utils/rateLimit');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
@@ -13,14 +13,6 @@ const cors = require('./middlewares/cors');
 
 const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } =
   process.env;
-
-// ограничиваем количество запросов с одного IP-адреса в единицу времени.
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
 
 const app = express();
 
@@ -64,11 +56,11 @@ app.use(auth);
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/movies'));
 
-app.use(errorLogger);
-
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Маршрут не найден'));
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
